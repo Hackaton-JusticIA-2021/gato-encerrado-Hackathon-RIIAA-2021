@@ -3,3 +3,4 @@ pytesseract
 Pillow
 pytesseract
 kraken
+numpy
