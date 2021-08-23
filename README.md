@@ -2,9 +2,9 @@
 
 # Extracción de texto
 
-**Nombre del equipo:** Gato Encerrado
+## **Nombre del equipo:** Gato Encerrado
 
-**Integrantes**
+## **Integrantes**
 
 Rebeca Angulo Rojas
 
