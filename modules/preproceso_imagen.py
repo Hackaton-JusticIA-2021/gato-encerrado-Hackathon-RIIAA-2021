@@ -118,6 +118,7 @@ def segmentar_orientar(img_path, output_dir = '', sufijo = '_bloques'):
   output_path_str = str(output_path)
 
   cv2.imwrite(output_path_str, img_bloques_o1)
+  return output_path_str
 
 
 def get_grayscale(image_path):
@@ -239,7 +240,7 @@ def guardar_imagen_cv2(img_path, filtro, filtro_name="", output_dir=""):
     output_dir = Path(output_dir)
     output_path = output_dir/output_filename
     cv2.imwrite(str(output_path), imagen_preprocesada)
-    
+    return str(output_path)
 
 
 # se guardan diferente las imagenes de pillow - cv2
@@ -256,6 +257,7 @@ def guardar_imagen_pillow(img_path, filtro, filtro_name="", output_dir=""):
         output_dir = Path(output_dir)
         output_path = str(output_dir/output_filename)
         im.save(output_path)
+        return output_path
     except:
         print("Error, image path incorrecto")
     
@@ -263,10 +265,10 @@ def guardar_imagen_pillow(img_path, filtro, filtro_name="", output_dir=""):
 
 def guardar_imagen(img_path, filtro, filtro_name="", output_dir="", pillow=False):
     if(pillow):
-        guardar_imagen_pillow(img_path, filtro, filtro_name, output_dir)
+        ruta=guardar_imagen_pillow(img_path, filtro, filtro_name, output_dir)
     else:
-        guardar_imagen_cv2(img_path, filtro, filtro_name,output_dir)
-        
+        ruta=guardar_imagen_cv2(img_path, filtro, filtro_name,output_dir)
+    return ruta
         
 
 def get_line(image_path,save_path):
