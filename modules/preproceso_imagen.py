@@ -174,7 +174,7 @@ def pillow_edges(image_path):
 
 
 def aplicar_preproceso(img_path, filtro):
-    imagen_preprocesada, filtro_name = filtro(img_path)
+    imagen_preprocesada = filtro(img_path)
     return imagen_preprocesada, filtro_name
 
 
