@@ -31,6 +31,8 @@ def get_dates(archivo,df):
         if i.startswith("Exp"):
             NO_EXPEDIENTE = i
             text = text.replace(i,'')
+        else:
+          NO_EXPEDIENTE = "No encontrado"
     for i in text.split():
       if i.startswith("H-") or i.startswith("L-"):
         text = text.replace(i,'')
