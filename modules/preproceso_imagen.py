@@ -1,16 +1,17 @@
 # funciones de preproceso
+#para manipulacion de imagenes y preproceso
 import cv2
 import numpy as np
 from PIL import Image, ImageFilter
 from PIL import ImageEnhance
 from kraken import binarization
-from kraken import blla
+from kraken import blla # for the baseline model
 import pytesseract
-from pathlib import Path
-import os 
+import os
+from pathlib import Path # para manipular paths
 
 
-def extraer_bloques_texto(img_path, sufijo = '_bloques', output_dir = ''):
+def extraer_bloques_texto(img_path):
   '''
   Extrae los bloques de una imagen y guarda la imagen obtenida.
   Primero obtiene poligonos que representan regiones con texto.
@@ -22,8 +23,10 @@ def extraer_bloques_texto(img_path, sufijo = '_bloques', output_dir = ''):
     -------------
     img_path: str
       Ruta del archivo
-    output_dir: str
-      Ruta del directorio para guardar las imagenes
+  
+  Returns
+  -------------
+  La imagen procesada (cv2)
   '''  
 
   # imagen de PIL para kraken
@@ -62,6 +65,49 @@ def extraer_bloques_texto(img_path, sufijo = '_bloques', output_dir = ''):
   x, y, w, h = cv2.boundingRect(np.array(region_total, dtype = np.int32))
   out_rect_cut = out_rect[y:y+h, x:x+w]
 
+  return out_rect_cut
+  
+def corregir_orientacion_vertical(im_cv):
+  rotate = False
+  angle = 0
+  im_cv_rotated = im_cv.copy()
+  try:
+    img_osd = pytesseract.image_to_osd(im, output_type = Output.DICT)
+    angle = 360 - img_osd['rotate']
+    rotate = True if abs(angle - 270) < 10 or abs(angle - 90) < 10 or abs(angle - 180) < 10 else False
+    # elegir entre rotar 90, 180 y 270
+    if rotate:
+      angles_diff = {x: abs(angle - x) for x in [90, 180, 270]}
+      angle_fix = min(angles_diff, key = angles_diff.get)
+      if angle_fix == 90:
+        im_cv_rotated = cv2.rotate(im_cv_rotated, cv2.ROTATE_90_COUNTERCLOCKWISE)
+      elif angle_fix == 270:
+        # rotate and y flip
+        im_cv_rotated = cv2.rotate(im_cv_rotated, cv2.ROTATE_90_CLOCKWISE)
+      elif angle_fix == 180:
+        pass
+        #im_cv_rotated = cv2.rotate(im_cv_rotated, cv2.ROTATE_180)
+  except:
+    pass
+  return im_cv_rotated
+
+def segmentar_orientar(img_path, output_dir = '', sufijo = '_bloques'):
+  '''
+  Extrae los bloques de una imagen, corrige la orientación y guarda la imagen obtenida.
+  
+  Parameters
+    -------------
+    img_path: str
+      Ruta del archivo
+    output_dir: str
+      Ruta del directorio para guardar las imagenes
+    sufijo : str
+      Sufijo para identificar las imagenes editadas
+  '''  
+  img_bloques = extraer_bloques_texto(img_path)
+  # se corrige la orientacion vertical
+  img_bloques_o1 = corregir_orientacion_vertical(img_bloques)
+  
   # obtiene el nombre de la imagen
   img_name = Path(img_path).name
   # cambia el sufijo
@@ -71,7 +117,7 @@ def extraer_bloques_texto(img_path, sufijo = '_bloques', output_dir = ''):
   output_path = output_dir / output_filename
   output_path_str = str(output_path)
 
-  cv2.imwrite(output_path_str, out_rect_cut)
+  cv2.imwrite(output_path_str, img_bloques_o1)
 
 
 def get_grayscale(image_path):
