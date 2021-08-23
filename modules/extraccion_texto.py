@@ -17,7 +17,12 @@ def guardar_texto(image_path, files_path):
     texto = extraer_texto_imagen(image_path)
     filename = image_path.replace('.JPG', '.txt').replace("/", "")
     os.chdir(dir+"files_path")
-    f = open(filename, "x")  # para que no se duplican
-    f.write(texto)
-    f.close()
-    os.chdir(dir)  # Muestra
+    f = open(filename, "x")
+    try:
+        f.write(texto)
+    except:
+        print("error en image_path ")
+    finally:
+        f.close()
+        os.chdir(dir)
+      # Muestra
