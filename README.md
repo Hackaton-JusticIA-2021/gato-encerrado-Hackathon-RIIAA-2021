@@ -6,15 +6,15 @@
 
 ## **Integrantes**
 
-Rebeca Angulo Rojas
+Rebeca Angulo Rojas [Rebeca98](https://github.com/Rebeca98)
 
-Javier Carrillo Martínez
+Javier Carrillo Martínez [Javcm](https://github.com/Javcm)
 
-Rolando Corona Jimenez
+Rolando Corona Jimenez [rolandocj](https://github.com/rolandocj)
 
-María Andrea Liliana Gómez Herrera
+María Andrea Liliana Gómez Herrera [andrea-liliana](https://github.com/andrea-liliana)
 
-Tulio Pérez Ortega
+Tulio Pérez Ortega [tulio2](https://github.com/tulio2)
 
 ## Pipeline
 1. Obtener los datos (imágenes)
