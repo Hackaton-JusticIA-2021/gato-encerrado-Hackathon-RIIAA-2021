@@ -7,6 +7,7 @@ from kraken import binarization
 from kraken import blla
 import pytesseract
 from pathlib import Path
+import os 
 
 
 def extraer_bloques_texto(img_path, sufijo = '_bloques', output_dir = ''):
@@ -219,3 +220,63 @@ def guardar_imagen(img_path, filtro, filtro_name="", output_dir="", pillow=False
         guardar_imagen_pillow(img_path, filtro, filtro_name, file_path)
     else:
         guardar_imagen_cv2(img_path, filtro, file_path)
+        
+        
+
+def get_line(image_path,save_path):
+#Segmentamos imagen
+  im=Image.open(image_path)
+  name=Path(image_path).name[:-4]
+  baseline_seg = blla.segment(im)
+  results=[]
+  if not os.path.exists(save_path):
+      os.mkdir(save_path)
+  folder_path=str(Path(save_path)/name)
+  os.mkdir(folder_path)
+  
+  #Nos moveremos en cada fila identificada
+  for k,segment in enumerate(baseline_seg['lines']):
+    sub_im=np.array(im)
+    blank=np.zeros(sub_im.shape)+255
+    #Lista de fronteras y lineas bases
+    boundaries=np.array(segment['boundary'])
+    lines=np.array(segment['baseline'])
+    #extremos y
+    y_max=max(boundaries[:,1])
+    y_min=min(boundaries[:,1])
+    #coordenadas base en x
+    x_left=min(lines[:,0])
+    x_right=max(lines[:,0])
+    #coordenadas base en y
+    y_left=lines[0,1]
+    y_right=lines[-1,1]
+    #Coordenadas y superiores 
+    ind=boundaries[:,1]<min(y_left,y_right)
+    sub_bound=boundaries[ind]
+    #x para cada limite superior de y
+    x_cut=sorted(list(set(list(sub_bound[:,0]))))
+    # pendiente linea de base
+    m=(y_right-y_left)/(x_right-x_left)
+    x_1=x_left
+    
+    for i in range(len(x_cut)):
+      x_2=x_cut[i]
+      #Selelccionamos coordenada y
+      index=sub_bound[:,0]==x_2
+      y_top=min(sub_bound[index,1])
+      #Calculamos aumento en base
+      delta=int((x_2-x_left)*m)
+      #Submatriz con la línea 
+      blank[y_top-10:(y_left+delta+10),x_1:x_2]=sub_im[y_top-10:(y_left+delta+10),x_1:x_2]
+      x_1=x_2
+      
+  #última iteracion
+    delta=int((x_right-x_left)*m)
+    blank[y_top-10:(y_left+delta+10),x_1:x_right]=sub_im[y_top-10:(y_left+delta+10),x_1:x_right]
+    result=blank[y_min:y_max,:]
+    results.append(result)
+    img_res=Image.fromarray(result).convert('RGB')
+    img_res.save(str(Path(folder_path)/str(i)+'.jpg'))
+    
+  return results
+
