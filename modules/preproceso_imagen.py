@@ -5,6 +5,7 @@ from PIL import Image, ImageFilter
 from PIL import ImageEnhance
 from kraken import binarization
 import pytesseract
+from pathlib import Path
 
 
 def get_grayscale(image_path):
@@ -111,7 +112,7 @@ def aplicar_preproceso(img_path, filtro):
     return imagen_preprocesada, filtro_name
 
 
-def guardar_imagen_cv2(img_path, filtro, filtro_name="", file_path=""):
+def guardar_imagen_cv2(img_path, filtro, filtro_name="", output_dir=""):
     """
     img_path: directorio de la imagen
     filtro: funcion para aplicar filtro
@@ -121,15 +122,16 @@ def guardar_imagen_cv2(img_path, filtro, filtro_name="", file_path=""):
         imagen_preprocesada = aplicar_preproceso(img_path, filtro)
     except:
         print("Error, image path incorrecto")
-    filename = file_path + img_path.replace('.JPG', '').replace(
-        "/", f"-{filtro_name}-")+".JPG"
-    cv2.imwrite(filename, imagen_preprocesada)
-    print("Error, file_path incorrecto")
-    return filename
+    img_name = Path(img_path).name #cambia el sufijo
+    output_filename = img_name.replace('.JPG','')+f"-{filtro_name}"+".JPG"
+    output_dir = Path(output_dir)
+    output_path = output_dir/output_filename
+    cv2.imwrite(str(output_path), imagen_preprocesada)
+    
 
 
 # se guardan diferente las imagenes de pillow - cv2
-def guardar_imagen_pillow(img_path, filtro, filtro_name="", file_path=""):
+def guardar_imagen_pillow(img_path, filtro, filtro_name="", output_dir=""):
     """
     img_path: directorio de la imagen
     filtro: funcion para aplicar filtro
@@ -137,13 +139,17 @@ def guardar_imagen_pillow(img_path, filtro, filtro_name="", file_path=""):
     """
     try:
         im = filtro(img_path)
+        img_name = Path(img_path).name #cambia el sufijo
+        output_filename = img_name.replace('.JPG','')+f"-{filtro_name}"
+        output_dir = Path(output_dir)
+        output_path = output_dir/output_filename
+        im.save(output_path)
     except:
         print("Error, image path incorrecto")
-    filename = file_path+img_path.replace("/", f"-{filtro_name}-")
-    im.save(filename)
+    
 
 
-def guardar_imagen(img_path, filtro, filtro_name="", file_path="", pillow=False):
+def guardar_imagen(img_path, filtro, filtro_name="", output_dir="", pillow=False):
     if(pillow):
         guardar_imagen_pillow(img_path, filtro, filtro_name, file_path)
     else:
