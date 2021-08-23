@@ -185,14 +185,15 @@ def guardar_imagen_cv2(img_path, filtro, filtro_name="", output_dir=""):
     file_path: directorio donde guardaremos las imagen
     """
     try:
-        imagen_preprocesada = aplicar_preproceso(img_path, filtro)
+      imagen_preprocesada = aplicar_preproceso(img_path, filtro)
+      img_name = Path(img_path).name #cambia el sufijo
+      output_filename = img_name.replace('.JPG','')+f"-{filtro_name}"+".JPG"
+      output_dir = Path(output_dir)
+      output_path = output_dir/output_filename
+      cv2.imwrite(str(output_path), imagen_preprocesada)
     except:
-        print("Error, image path incorrecto")
-    img_name = Path(img_path).name #cambia el sufijo
-    output_filename = img_name.replace('.JPG','')+f"-{filtro_name}"+".JPG"
-    output_dir = Path(output_dir)
-    output_path = output_dir/output_filename
-    cv2.imwrite(str(output_path), imagen_preprocesada)
+       print("Error, image path incorrecto")
+    
     
 
 
