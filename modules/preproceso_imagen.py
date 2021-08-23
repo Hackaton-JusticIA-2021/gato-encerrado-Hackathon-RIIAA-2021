@@ -189,7 +189,7 @@ def guardar_imagen_cv2(img_path, filtro, filtro_name="", output_dir=""):
     except:
         print("Error, image path incorrecto")
     img_name = Path(img_path).name #cambia el sufijo
-    output_filename = img_name.replace('.JPG','')+f"-{filtro_name}"+".JPG"
+    output_filename = img_name.replace('.JPG','')+filtro_name+".JPG"
     output_dir = Path(output_dir)
     output_path = output_dir/output_filename
     cv2.imwrite(str(output_path), imagen_preprocesada)
@@ -219,7 +219,7 @@ def guardar_imagen(img_path, filtro, filtro_name="", output_dir="", pillow=False
     if(pillow):
         guardar_imagen_pillow(img_path, filtro, filtro_name, output_dir)
     else:
-        guardar_imagen_cv2(img_path, filtro, output_dir)
+        guardar_imagen_cv2(img_path, filtro, filtro_name,output_dir)
         
         
 
@@ -279,4 +279,3 @@ def get_line(image_path,save_path):
     img_res.save(str(Path(folder_path)/str(i)+'.jpg'))
     
   return results
-
