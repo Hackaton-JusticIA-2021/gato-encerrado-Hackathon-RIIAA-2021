@@ -13,9 +13,10 @@ def find_matches(name,clase,df_transcripciones):
   matchs = rapidfuzz.process.extract(name, df_transcripciones["Texto"], scorer=rapidfuzz.fuzz.token_set_ratio,  score_cutoff=85,limit=900)
   df_aux = pd.DataFrame(np.array(matchs).reshape((len(matchs),3)),columns=["label","confianza","Index"])
   df_aux["Index"] = df_aux["Index"].astype(int)
-  df_salida = df_aux.merge(df_transcripciones,  how='inner', on='Index').drop(["Conjunto","Fuente","Texto","MetodoTexto","confianza","Index"],axis = 1)
+  df_salida = df_aux.merge(df_transcripciones,  how='inner', on='Index')
   df_salida["label"] = name
   df_salida["clase"] = clase
+  df_salida = df_salida[["label","NombreArchivo","clase"]]
   return df_salida
 
 #Función que toma como argumentos un dataframe de transcripciones en el formato de salida del reto 2A y una lista de peronas, entidades,etc a buscar 
@@ -37,7 +38,8 @@ def obtener_matchs(df_transcripciones,listas):
 
 def obtener_df_expedientes_fechas_single(nombre_archivo,df_transcripcion):  
   if (df_transcripcion["NombreArchivo"]==nombre_archivo).sum()==0:
-    return 0
+    print("El archivo no se encuentra en la base de transcripciones.")
+    return pd.DataFrame()
 
   else:
     text = df_transcripcion[df_transcripcion["NombreArchivo"]==nombre_archivo]["Texto"].values[0]
@@ -67,7 +69,7 @@ def obtener_df_expedientes_fechas_single(nombre_archivo,df_transcripcion):
 def obtener_df_expedientes_fechas(df_transcripcion):
   df_fechas_exp = pd.DataFrame()
   for nombre_archivo in df_transcripcion["NombreArchivo"]:
-    df_fechas_exp = df_fechas_exp.append(obtener_df_expedientes_fechas_single(nombre_archivo,transcripciones))
+    df_fechas_exp = df_fechas_exp.append(obtener_df_expedientes_fechas_single(nombre_archivo,df_transcripcion))
 
   df_fechas = df_fechas_exp[["NombreArchivo","fechas"]]
   df_fechas["clase"] ="Fechas" 
