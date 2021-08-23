@@ -1,7 +1,5 @@
-pdf2image
 pytesseract
 Pillow
-pytesseract
 kraken
 numpy
 opencv-python
