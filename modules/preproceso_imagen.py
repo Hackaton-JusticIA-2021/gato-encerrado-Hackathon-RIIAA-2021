@@ -217,9 +217,9 @@ def guardar_imagen_pillow(img_path, filtro, filtro_name="", output_dir=""):
 
 def guardar_imagen(img_path, filtro, filtro_name="", output_dir="", pillow=False):
     if(pillow):
-        guardar_imagen_pillow(img_path, filtro, filtro_name, file_path)
+        guardar_imagen_pillow(img_path, filtro, filtro_name, output_dir)
     else:
-        guardar_imagen_cv2(img_path, filtro, file_path)
+        guardar_imagen_cv2(img_path, filtro, output_dir)
         
         
 
