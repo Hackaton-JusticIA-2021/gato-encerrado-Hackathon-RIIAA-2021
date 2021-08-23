@@ -2,9 +2,9 @@ import pytesseract
 from PIL import Image
 
 
-def extraer_texto_imagen(image_path):
+def extraer_texto_imagen(image_path, psm=6):
     im = Image.open(image_path)
-    custom_config = r'--oem 3 --psm 6 --lang spa'
+    custom_config = r'--oem 3 --psm '+str(psm)+' --lang spa'
     texto = pytesseract.image_to_string(im, config=custom_config)
     return texto
 
