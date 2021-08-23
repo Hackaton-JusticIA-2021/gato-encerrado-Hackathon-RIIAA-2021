@@ -17,15 +17,17 @@ María Andrea Liliana Gómez Herrera
 Tulio Pérez Ortega
 
 ## Pipeline
-1. Obtener los datos
-2. Calcular tamaño de imagenes
+1. Obtener los datos (imágenes)
+2. Preprocesamiento de imágenes: segmentacion, rotación y aplicación de filtros a la imágen
+3. Extracción y almacenamiento del texto generado
+4. Procesamiento de texto: extraccion de entidades y almacenamiento de resultados
+5. Evluación del modelo
 
 ## Cómo correr el código
-Ejecutar el ipynb
+1. Instalación previa de paquetes necesarios para python `requierements.txt`
+2. Ejecutar el ipynb `implementacion_preprocesamiento_extraccion.ipynb`. Dentro del notebook vienen las instrucciones para importar las respectivas librerías. 
 
 ## Notas
-Acerca de los [README](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-readmes)
-
 ## Este código no es el final.
 
 
