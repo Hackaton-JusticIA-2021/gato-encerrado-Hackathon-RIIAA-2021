@@ -66,14 +66,23 @@ def extraer_bloques_texto(img_path):
   out_rect_cut = out_rect[y:y+h, x:x+w]
 
   return out_rect_cut
-  
+
+# sin keras preprocessing
+def thresholding2(im):
+  gray_image = im.convert('L')
+  th = cv2.adaptiveThreshold(
+          np.array(gray_image), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+  return th
+
 def corregir_orientacion_vertical(im_cv):
   rotate = False
   angle = 0
   im_cv_rotated = im_cv.copy()
   try:
+    #img_osd = pytesseract.image_to_osd(thresholding2(im), output_type = Output.DICT)
     img_osd = pytesseract.image_to_osd(im, output_type = Output.DICT)
     angle = 360 - img_osd['rotate']
+    print(angle)
     rotate = True if abs(angle - 270) < 10 or abs(angle - 90) < 10 or abs(angle - 180) < 10 else False
     # elegir entre rotar 90, 180 y 270
     if rotate:
@@ -90,7 +99,7 @@ def corregir_orientacion_vertical(im_cv):
   except:
     pass
   return im_cv_rotated
-
+  
 def segmentar_orientar(img_path, output_dir = '', sufijo = '_bloques'):
   '''
   Extrae los bloques de una imagen, corrige la orientación y guarda la imagen obtenida.
