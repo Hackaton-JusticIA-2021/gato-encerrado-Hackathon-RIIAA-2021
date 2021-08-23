@@ -19,19 +19,24 @@ def find_matches(name,clase,df):
 
 #Función para encontrar fechas de una ficha 
 def get_dates(archivo,df):
-  text = df[df["NombreArchivo"]==archivo]["Texto"].values[0]
-  print(text)
-  df_fechas = pd.DataFrame()
-  for i in text.split():
-      if i.startswith("Exp"):
-          NO_EXPEDIENTE = i
-          text = text.replace(i,'')
-  for i in text.split():
-    if i.startswith("H-") or i.startswith("L-"):
-      text = text.replace(i,'')
-  matches = datefinder.find_dates(text)
-  for match in matches:
-    df_fechas = df_fechas.append(pd.DataFrame(np.array([archivo, match]).reshape(1,2),
-             columns=["NombreArchivo","fechas"]))
-  df_fechas['Expediente'] = NO_EXPEDIENTE
+  
+  if (df["NombreArchivo"]==archivo).sum()==0:
+    print("Registro no encontrado en la base")
+    return 0
+
+  else:
+    text = df[df["NombreArchivo"]==archivo]["Texto"].values[0]
+    df_fechas = pd.DataFrame()
+    for i in text.split():
+        if i.startswith("Exp"):
+            NO_EXPEDIENTE = i
+            text = text.replace(i,'')
+    for i in text.split():
+      if i.startswith("H-") or i.startswith("L-"):
+        text = text.replace(i,'')
+    matches = datefinder.find_dates(text)
+    for match in matches:
+      df_fechas = df_fechas.append(pd.DataFrame(np.array([archivo, match]).reshape(1,2),
+              columns=["NombreArchivo","fechas"]))
+    df_fechas['Expediente'] = NO_EXPEDIENTE
   return (df_fechas)
