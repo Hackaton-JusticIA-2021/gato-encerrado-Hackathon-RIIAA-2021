@@ -1,6 +1,6 @@
 import pytesseract
 from PIL import Image
-
+from pathlib import Path
 
 def extraer_texto_imagen(image_path, psm=6):
     im = Image.open(image_path)
