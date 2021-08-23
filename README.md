@@ -6,6 +6,12 @@
 
 **Integrantes**
 
+Rebeca Angulo Rojas
+Javier Carrillo Martínez
+Rolando Corona Jimenez
+María Andrea Liliana Gómez Herrera
+Tulio Pérez Ortega
+
 ## Descripión
 Este es un ejemplo de como deben de crear su repositorio.
 
