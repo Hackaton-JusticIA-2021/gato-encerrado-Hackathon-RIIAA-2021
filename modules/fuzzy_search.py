@@ -32,6 +32,14 @@ def obtener_matchs(df_transcripciones,listas):
   return df_salida
 
 
+from datetime import datetime
+
+#Función que modifica el formato de una fecha
+def transform_date(date):
+  date_time = date
+  d = date_time.strftime('%m/%d/%Y')
+
+  return d
 
 #Función que recibe como argumentos el nombre de un archivo y un data frame con las transcripciones, devuelve un aviso si el nombre del archivo no se encuentra en la base de transcripciones 
 #y devuelve un dataframe con las fechas y número de expediente encontrados en la transcripción. (El formato de salida no corresponde con el reto 2B, este se obtiene más adelante.)
@@ -60,7 +68,7 @@ def obtener_df_expedientes_fechas_single(nombre_archivo,df_transcripcion):
         text = text.replace(i,'')
     matches = datefinder.find_dates(text)
     for match in matches:
-      df_fechas_exp = df_fechas_exp.append(pd.DataFrame(np.array([nombre_archivo, match]).reshape(1,2),
+      df_fechas_exp = df_fechas_exp.append(pd.DataFrame(np.array([nombre_archivo, transform_date(match)]).reshape(1,2),
               columns=["NombreArchivo","fechas"]))
     df_fechas_exp['Expediente'] = NO_EXPEDIENTE
   return (df_fechas_exp)
