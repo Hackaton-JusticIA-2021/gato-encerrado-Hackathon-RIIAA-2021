@@ -26,7 +26,7 @@ Ejecutar el ipynb
 ## Notas
 Acerca de los [README](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-readmes)
 
-
+## Este código no es el final.
 
 
 
