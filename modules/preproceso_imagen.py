@@ -4,8 +4,73 @@ import numpy as np
 from PIL import Image, ImageFilter
 from PIL import ImageEnhance
 from kraken import binarization
+from kraken import blla
 import pytesseract
 from pathlib import Path
+
+
+def extraer_bloques_texto(img_path, sufijo = '_bloques', output_dir = ''):
+  '''
+  Extrae los bloques de una imagen y guarda la imagen obtenida.
+  Primero obtiene poligonos que representan regiones con texto.
+  Luego genera rectangulos que contienen a dichas regiones.
+  Finalmente, recorta la imagen usando al menor rectangulo 
+  que contiene a todas los rectangulos anteriores.
+
+  Parameters
+    -------------
+    img_path: str
+      Ruta del archivo
+    output_dir: str
+      Ruta del directorio para guardar las imagenes
+  '''  
+
+  # imagen de PIL para kraken
+  im = Image.open(img_path)
+  # imagen de openvc para manipulacion de geometria
+  im_cv = cv2.cvtColor(np.array(im), cv2.COLOR_RGB2BGR)
+
+  # segmentacion de la imagen
+  # se podría convertir a imagen binaria antes de la segmentación
+  # se prefiere la imagen original, para no perder escritura con lapiz
+  baseline_seg = blla.segment(im)
+
+  # coordenadas de los poligonos que contienen regiones con texto
+  text_regions = baseline_seg['regions']['text']
+ 
+  # regiones de texto con rectangulos
+  # imagen de salida (rectangulos), lienzo en blanco del mismo tamaño que la original
+  # para que el lienzo sea negro, fijar out = 0
+  out_rect = np.zeros_like(im_cv)
+  out_rect = 255 - out_rect
+
+  # se crean mascaras para los rectangulos que contienen regiones con texto
+  for region in text_regions:
+    pts = np.array(region, dtype = np.int32)
+    # se encuentra el rectangulo que contiene al poligono
+    x_r, y_r, w_r, h_r = cv2.boundingRect(pts)
+    mask = np.zeros((im_cv.shape[0], im_cv.shape[1]))
+    mask = mask.astype(np.bool)
+    # se copia solamente la region que estan en la mascara
+    out_rect[y_r:y_r+h_r, x_r:x_r+w_r] = im_cv[y_r:y_r+h_r, x_r:x_r+w_r]
+
+  region_total = [punto for region in text_regions for punto in region]
+
+  # se eliminan regiones de la imagen sin texto
+  # agregar padding si hace falta
+  x, y, w, h = cv2.boundingRect(np.array(region_total, dtype = np.int32))
+  out_rect_cut = out_rect[y:y+h, x:x+w]
+
+  # obtiene el nombre de la imagen
+  img_name = Path(img_path).name
+  # cambia el sufijo
+  output_filename = img_name.replace('.JPG', '') + sufijo + '.JPG'
+  # crea el path de salida
+  output_dir = Path(output_dir)
+  output_path = output_dir / output_filename
+  output_path_str = str(output_path)
+
+  cv2.imwrite(output_path_str, out_rect_cut)
 
 
 def get_grayscale(image_path):
