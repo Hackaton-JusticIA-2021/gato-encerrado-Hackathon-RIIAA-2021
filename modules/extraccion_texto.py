@@ -21,8 +21,9 @@ def guardar_texto(image_path, files_path):
     try:
         f = open(output_path, "x")
         f.write(texto)
+        f.close()
     except:
         print("error en image_path ")
-    finally:
-        f.close()
+    
+        
     return texto
