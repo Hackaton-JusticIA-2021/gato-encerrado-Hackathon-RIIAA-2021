@@ -10,7 +10,7 @@ Rebeca Angulo Rojas [Rebeca98](https://github.com/Rebeca98)
 
 Javier Carrillo Martínez [Javcm](https://github.com/Javcm)
 
-Rolando Corona Jimenez [rolandocj](https://github.com/rolandocj)
+Rolando Corona Jiménez [rolandocj](https://github.com/rolandocj)
 
 María Andrea Liliana Gómez Herrera [andrea-liliana](https://github.com/andrea-liliana)
 
@@ -18,9 +18,9 @@ Tulio Pérez Ortega [tulio2](https://github.com/tulio2)
 
 ## Pipeline
 1. Obtener los datos (imágenes)
-2. Preprocesamiento de imágenes: segmentacion, rotación y aplicación de filtros a la imágen
+2. Preprocesamiento de imágenes: segmentación, rotación y aplicación de filtros a la imagen
 3. Extracción y almacenamiento del texto generado
-4. Procesamiento de texto: extraccion de entidades y almacenamiento de resultados
+4. Procesamiento de texto: extracción de entidades y almacenamiento de resultados
 5. Evaluación del modelo
 
 ![](Flujo_solucion.jpg)
