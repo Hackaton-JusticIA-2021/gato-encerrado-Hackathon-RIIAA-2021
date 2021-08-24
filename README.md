@@ -23,7 +23,7 @@ Tulio Pérez Ortega [tulio2](https://github.com/tulio2)
 4. Procesamiento de texto: extraccion de entidades y almacenamiento de resultados
 5. Evluación del modelo
 
-![alt text](https://github.com/Hackaton-JusticIA-2021/gato-encerrado-Hackathon-RIIAA-2021//[Hackaton-JusticIA-2021]/[gato-encerrado-Hackathon-RIIAA-2021]/blob/[main]/Flujo_solucion.jpg?raw=true)
+![](Flujo_solucion.jpg)
 
 ## Cómo correr el código
 1. Instalación previa de paquetes necesarios para python `requierements.txt`
