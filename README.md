@@ -29,8 +29,10 @@ Tulio Pérez Ortega [tulio2](https://github.com/tulio2)
 1. Instalación previa de paquetes necesarios para python `requierements.txt`
 2. Ejecutar el ipynb `implementacion_preprocesamiento_extraccion.ipynb`. Dentro del notebook vienen las instrucciones para importar las respectivas librerías. 
 
-## Notas
-## Este código no es el final.
+
+
+%## Notas
+%## Este código no es el final.
 
 
 
