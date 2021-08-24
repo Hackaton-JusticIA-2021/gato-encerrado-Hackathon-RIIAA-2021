@@ -23,7 +23,7 @@ def guardar_texto(image_path, files_path):
         f.write(texto)
         f.close()
     except:
-        print("error en image_path ")
+        print("El archivo ya existe ")
     
         
     return texto
