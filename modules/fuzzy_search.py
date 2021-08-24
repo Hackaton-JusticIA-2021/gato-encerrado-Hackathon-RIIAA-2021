@@ -86,3 +86,50 @@ def obtener_df_expedientes_fechas(df_transcripcion):
   df_expedientes["clase"] ="Expediente" 
   df_expedientes.columns = ["NombreArchivo","label","clase"]
   return df_expedientes.append(df_fechas)
+
+
+def word_cloud(df,column,name):
+  from wordcloud import WordCloud
+  import nltk
+  nltk.download('stopwords')
+  from nltk.corpus import stopwords
+  import matplotlib.pyplot as plt
+  import pandas as pd
+  import seaborn as snb; snb.set()
+    
+  comment_words = ''
+  stopwords = set(stopwords.words('spanish'))
+  stopwords.add("exp") 
+  
+
+  for val in df[column]:
+      
+      val = str(val)
+  
+      tokens = val.split()
+      
+      for i in range(len(tokens)):
+          tokens[i] = tokens[i].lower()
+      
+      comment_words += " ".join(tokens)+" "
+  
+  wordcloud = WordCloud(width = 800, height = 800,
+                  background_color ='white',
+                  stopwords = stopwords,
+                  min_font_size = 10).generate(comment_words)
+                  
+  plt.figure(figsize = (8, 8), facecolor = None)
+  plt.title(name,fontsize=30)
+  plt.imshow(wordcloud)
+  plt.axis("off")
+  plt.tight_layout(pad = 0)
+  
+  plt.show()
+  
+ 
+def find_matchs_word_cloud(name,df_transcripciones,threshold =60):
+  matchs = rapidfuzz.process.extract(name, df_transcripciones["Texto"], scorer=rapidfuzz.fuzz.token_set_ratio,  score_cutoff=threshold,limit=900)
+  df_aux = pd.DataFrame(np.array(matchs).reshape((len(matchs),3)),columns=["label","confianza","Index"])
+  mask = list(df_aux["Index"].values.astype(int))
+  word_cloud(df_transcripciones.loc[mask],"Texto",name)
+  return df_transcripciones.loc[mask]
