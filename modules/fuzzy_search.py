@@ -8,9 +8,9 @@ import re
 #Función que recibe el nombre de alguna entidad a buscar, una clase ('Organización', 'Lugar', 'Servidor Público', 'Enjuiciados') y un dataframe con las transcripciones. 
 #Encuentra los matchs entre la entidad y los textos del 
 
-def find_matches(name,clase,df_transcripciones):
+def obtener_matchs_single(name,clase,df_transcripciones,threshold):
   df_transcripciones["Index"]=df_transcripciones.index
-  matchs = rapidfuzz.process.extract(name, df_transcripciones["Texto"], scorer=rapidfuzz.fuzz.token_set_ratio,  score_cutoff=85,limit=900)
+  matchs = rapidfuzz.process.extract(name, df_transcripciones["Texto"], scorer=rapidfuzz.fuzz.token_set_ratio,  score_cutoff=threshold,limit=900)
   df_aux = pd.DataFrame(np.array(matchs).reshape((len(matchs),3)),columns=["label","confianza","Index"])
   df_aux["Index"] = df_aux["Index"].astype(int)
   df_salida = df_aux.merge(df_transcripciones,  how='inner', on='Index')
@@ -23,17 +23,15 @@ def find_matches(name,clase,df_transcripciones):
 #(Nota:Es importante que las listas tengan el mismo formato, es decir nombres de las columnas, con el que se nos proporcionaron al inicio). y devuelve un dataframe con todas las coincidencias encontradas en el formato del reto 2B
 #el parámetro listas debe tener el siguiente formato:
 #listas = [organizaciones,lugares,servidores,enjuiciados]
-
-def obtener_matchs(df_transcripciones,listas):  
+def obtener_matchs_df(df_transcripciones,listas):  
   df_salida = pd.DataFrame([],columns=["label","NombreArchivo","clase"])
   for lista in listas:
     for i in range(len(lista)):
-      df_salida = df_salida.append(find_matches(lista.head(i+1)[lista.columns[0]].values[-1],lista.columns[0],df_transcripciones))
+      df_salida = df_salida.append(obtener_matchs_single(lista.head(i+1)[lista.columns[0]].values[-1],lista.columns[0],df_transcripciones,threshold))
   return df_salida
 
 
 from datetime import datetime
-
 #Función que modifica el formato de una fecha
 def transform_date(date):
   date_time = date
