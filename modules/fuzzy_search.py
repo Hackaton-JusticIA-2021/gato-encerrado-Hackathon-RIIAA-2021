@@ -23,7 +23,7 @@ def obtener_matchs_single(name,clase,df_transcripciones,threshold):
 #(Nota:Es importante que las listas tengan el mismo formato, es decir nombres de las columnas, con el que se nos proporcionaron al inicio). y devuelve un dataframe con todas las coincidencias encontradas en el formato del reto 2B
 #el parámetro listas debe tener el siguiente formato:
 #listas = [organizaciones,lugares,servidores,enjuiciados]
-def obtener_matchs_df(df_transcripciones,listas):  
+def obtener_matchs_df(df_transcripciones,listas,threshold):  
   df_salida = pd.DataFrame([],columns=["label","NombreArchivo","clase"])
   for lista in listas:
     for i in range(len(lista)):
