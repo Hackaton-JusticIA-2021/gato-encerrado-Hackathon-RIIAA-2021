@@ -21,7 +21,7 @@ Tulio Pérez Ortega [tulio2](https://github.com/tulio2)
 2. Preprocesamiento de imágenes: segmentacion, rotación y aplicación de filtros a la imágen
 3. Extracción y almacenamiento del texto generado
 4. Procesamiento de texto: extraccion de entidades y almacenamiento de resultados
-5. Evluación del modelo
+5. Evaluación del modelo
 
 ![](Flujo_solucion.jpg)
 
